@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float _speed = 40f;
-    [SerializeField] private float _jumpForce = 400f;
-    [Range(0, .3f)] [SerializeField] private float _movementSmoothing = .05f;
+    public float _speed = 20f;
+    [SerializeField] private float _jumpForce = 150f;
+    [Range(0, .3f)] [SerializeField] private float _movementSmoothing = .1f;
     [SerializeField] private LayerMask _colliders;
+    [SerializeField] private Transform _groundChecker;
 
-    private Transform _groundChecker;
-    private const float _groundedRadius = .2f;
+    private const float _groundedRadius = .1f;
     public bool _isGrounded;
     private Rigidbody2D _body;
     private bool _isRight = true;
@@ -23,8 +23,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _body = GetComponent<Rigidbody2D>();
-        _groundChecker = transform;
-
     }
 
     	// Update is called once per frame
@@ -41,15 +39,15 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate is called every physics update
     private void FixedUpdate()
     {
-        _isGrounded = Physics.CheckSphere(_groundChecker.position, _groundedRadius, _colliders, QueryTriggerInteraction.Ignore);
-        // Collider2D[] colliders = Physics2D.OverlapCircleAll(_groundChecker.position, _groundedRadius, _colliders);
-        // for (int i = 0; i < colliders.Length; i++) 
-        // {
-        //     if (colliders[i].gameObject != gameObject) 
-        //     {
-        //         _isGrounded = true;
-        //     }
-        // }
+        _isGrounded = false;
+		// The player is grounded if a circlecast to the groundcheck position hits anything designated as ground
+		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(_groundChecker.position, _groundedRadius, _colliders);
+		for (int i = 0; i < colliders.Length; i++)
+		{
+			if (colliders[i].gameObject != gameObject)
+				_isGrounded = true;
+		}
         // Move our character
 		Move(_horizontalMove * Time.fixedDeltaTime);
         _isJump = false;
