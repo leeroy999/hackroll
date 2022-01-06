@@ -195,7 +195,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _groundChecker: {fileID: 691359499010534102}
-  _sprite: {fileID: 0}
 --- !u!114 &10718619315405183
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class PlayerController : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(SpriteRenderer))]
+public class PlayerController : MonoBehaviour, IPunObservable
 {
     public float _speed = 20f;
     [SerializeField] private float _jumpForce = 150f;
@@ -20,7 +23,7 @@ public class PlayerController : MonoBehaviour
     private bool _isJump = false;
 
     private PhotonView _view;
-    [SerializeField] private SpriteRenderer _sprite;
+    private SpriteRenderer _sprite;
 
 
     // Start is called before the first frame update
@@ -29,6 +32,10 @@ public class PlayerController : MonoBehaviour
         _body = GetComponent<Rigidbody2D>();
         _view = GetComponent<PhotonView>();
         _sprite = GetComponent<SpriteRenderer>();
+        if (!_view.ObservedComponents.Contains(this))
+		{
+			_view.ObservedComponents.Add(this);
+		}
     }
 
     	// Update is called once per frame
@@ -65,6 +72,18 @@ public class PlayerController : MonoBehaviour
 		Move(_horizontalMove * Time.fixedDeltaTime);
         _isJump = false;
     }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+	{
+		if (stream.IsWriting)
+		{
+			stream.SendNext(_sprite.flipX);
+		}
+		else
+		{
+			_sprite.flipX = (bool) stream.ReceiveNext();
+		}
+	}
 
     private void Move(float move) 
     {
