@@ -164,8 +164,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _groundChecker: {fileID: 1188845970331048468}
-  _isGrounded: 1
-  _horizontalMove: 0
 --- !u!114 &5182652579922843068
 MonoBehaviour:
   m_ObjectHideFlags: 0

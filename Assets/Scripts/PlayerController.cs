@@ -12,14 +12,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundChecker;
 
     private const float _groundedRadius = .1f;
-    public bool _isGrounded;
+    private bool _isGrounded;
     private Rigidbody2D _body;
     private bool _isRight = true;
     private Vector2 _velocity = Vector2.zero;
-    [SerializeField]private float _horizontalMove = 0f;
+    private float _horizontalMove = 0f;
     private bool _isJump = false;
 
     private PhotonView _view;
+    [SerializeField] private SpriteRenderer _sprite;
 
 
     // Start is called before the first frame update
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     {
         _body = GetComponent<Rigidbody2D>();
         _view = GetComponent<PhotonView>();
+        _sprite = GetComponent<SpriteRenderer>();
     }
 
     	// Update is called once per frame
@@ -71,10 +73,13 @@ public class PlayerController : MonoBehaviour
         // And then smoothing it out and applying it to the character
         _body.velocity = Vector2.SmoothDamp(_body.velocity, targetVelocity, ref _velocity, _movementSmoothing);
 
-        if ((move > 0 && !_isRight) || (move < 0 && _isRight))
+        if (move < 0)
         {
             // flip the player.
-            Flip();
+            _sprite.flipX = true;
+        } else if (move > 0)
+        {
+            _sprite.flipX = false;
         }
 
         if (_isJump && _isGrounded) 
@@ -83,15 +88,4 @@ public class PlayerController : MonoBehaviour
             _body.AddForce(new Vector2(0f, _jumpForce));
         }
     }
-
-    private void Flip()
-	{
-		// Switch the way the player is labelled as facing.
-		_isRight = !_isRight;
-
-		// Multiply the player's x local scale by -1.
-		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
-		transform.localScale = theScale;
-	}
 }
