@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,22 +19,32 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private float _horizontalMove = 0f;
     private bool _isJump = false;
 
+    private PhotonView _view;
+
 
     // Start is called before the first frame update
     private void Start()
     {
         _body = GetComponent<Rigidbody2D>();
+        _view = GetComponent<PhotonView>();
     }
 
     	// Update is called once per frame
 	private void Update () 
     {
-        _horizontalMove = Input.GetAxisRaw("Horizontal") * _speed;
-        if (Input.GetAxisRaw("Vertical") > 0)
+        if (_view.IsMine)
         {
-            _isJump = true;
-        }
+            _horizontalMove = Input.GetAxisRaw("Horizontal") * _speed;
+            if (Input.GetAxisRaw("Vertical") > 0)
+            {
+                _isJump = true;
+            }
 
+            if (transform.position.y < -8)
+            {
+                transform.position = new Vector2(-8, -3.25f);
+            }
+        }
     }
 
     // FixedUpdate is called every physics update
