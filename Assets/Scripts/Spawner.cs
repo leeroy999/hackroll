@@ -9,19 +9,9 @@ public class Spawner : MonoBehaviourPun
 {
     public GameObject CatPrefab;
     public Text PlayerCountText;
+    public Text Health;
     public Transform Portal1;
     public Transform Portal2;
-    private Color[] colors = 
-    {
-        Color.white,
-        Color.cyan, 
-        Color.yellow, 
-        new Color(250, 180, 245, 255), // pink
-        Color.gray, 
-        new Color(0x6a, 0x75, 0x95, 0xFF), // light blue-ish
-        new Color(233, 157, 173, 255), //light red
-        new Color(157, 164, 233, 255), //light blue
-    };
 
     // Start is called before the first frame update
     public void Start()
@@ -36,7 +26,7 @@ public class Spawner : MonoBehaviourPun
             GameManager.Portal = playerCount % 2;
             GameManager.PlayerName = PhotonNetwork.NickName;
             GameManager.SceneBuildInitial = SceneManager.GetActiveScene().buildIndex;
-            CatPrefab.GetComponent<SpriteRenderer>().color = colors[playerCount - 1];
+            GameManager.PlayerNo = (playerCount - 1) % 8;
             PhotonNetwork.Instantiate(CatPrefab.name, position, Quaternion.identity);
         } 
         // else if (GameManager.Level < GameManager.MaxLevel) {
@@ -54,6 +44,11 @@ public class Spawner : MonoBehaviourPun
         {
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
+    }
+
+    private void Update()
+    {
+        Health.text = "Health: " + GameManager.Health;
     }
 
     [PunRPC]
