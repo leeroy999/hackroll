@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 3524023567556715801}
   - component: {fileID: 7771020246798666171}
   - component: {fileID: 2803493143627260314}
+  - component: {fileID: -2302972017657333553}
   m_Layer: 0
   m_Name: NinjaCat
   m_TagString: Untagged
@@ -85,7 +86,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7454586371560560593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.606502, y: -3.2190123, z: 0}
+  m_LocalPosition: {x: -7.132, y: -3.575, z: 0}
   m_LocalScale: {x: 2.1490748, y: 2.1490748, z: 4.2981496}
   m_Children:
   - {fileID: 7454586371336710833}
@@ -303,6 +304,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.07971091, y: 0.057054326}
   m_EdgeRadius: 0
+--- !u!114 &-2302972017657333553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7454586371560560593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2078c021b6c1c42b1d60d31959eb74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8578130042220133820
 GameObject:
   m_ObjectHideFlags: 0
