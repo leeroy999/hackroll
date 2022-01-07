@@ -6,18 +6,18 @@ using Photon.Pun;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(SpriteRenderer))]
-public class PlayerController : MonoBehaviour, IPunObservable
+public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     public float _speed = 20f;
-    [SerializeField] private float _jumpForce = 150f;
+    [SerializeField] private float _jumpForce = 100f;
     [Range(0, .3f)] [SerializeField] private float _movementSmoothing = .1f;
     [SerializeField] private LayerMask _colliders;
     [SerializeField] private Transform _groundChecker;
+    [SerializeField] private TextMesh _playerName;
 
-    private const float _groundedRadius = .1f;
+    private const float _groundedRadius = .075f;
     private bool _isGrounded;
     private Rigidbody2D _body;
-    private bool _isRight = true;
     private Vector2 _velocity = Vector2.zero;
     private float _horizontalMove = 0f;
     private bool _isJump = false;
@@ -38,11 +38,12 @@ public class PlayerController : MonoBehaviour, IPunObservable
 		}
     }
 
-    	// Update is called once per frame
+    // Update is called once per frame
 	private void Update () 
     {
         if (_view.IsMine)
         {
+            this.photonView.RPC("ChangeName", RpcTarget.All, PhotonNetwork.NickName);
             _horizontalMove = Input.GetAxisRaw("Horizontal") * _speed;
             if (Input.GetAxisRaw("Vertical") > 0)
             {
@@ -51,7 +52,7 @@ public class PlayerController : MonoBehaviour, IPunObservable
 
             if (transform.position.y < -8)
             {
-                transform.position = new Vector2(-8, -3.25f);
+                transform.position = GameManager.SpawnPoint;
             }
         }
     }
@@ -106,5 +107,11 @@ public class PlayerController : MonoBehaviour, IPunObservable
             _isGrounded = false;
             _body.AddForce(new Vector2(0f, _jumpForce));
         }
+    }
+
+    [PunRPC]
+    private void ChangeName(string name)
+    {
+        _playerName.text = name;
     }
 }
