@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class NextLevel : MonoBehaviour
 {
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
         TextMesh playerName = other.gameObject.GetComponentInChildren<TextMesh>();
-        
+        GameManager.PlayerWin(playerName.text);
     }
 }

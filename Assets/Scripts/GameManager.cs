@@ -13,8 +13,8 @@ public class GameManager : MonoBehaviour
     public static Vector2 SpawnPoint;
     public static int Portal;
     public static string PlayerName;
-    public static Dictionary<string, int> Jealousy;
-    public static Dictionary<string, int> ScoreBoard;
+    public static Dictionary<string, int> Jealousy = new Dictionary<string, int>();
+    public static Dictionary<string, int> ScoreBoard = new Dictionary<string, int>();
     
 
     public static void PlayerWin(string name)
@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
                 ? Jealousy[name] + 1
                 : 1; 
         }
-        SceneManager.LoadScene(SceneBuildInitial + Level);
+        int lvl = SceneBuildInitial + Level;
+        Debug.Log("Win" + lvl.ToString());
+        SceneManager.LoadScene(lvl);
     }
 }
