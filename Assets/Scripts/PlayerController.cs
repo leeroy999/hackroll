@@ -61,7 +61,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             if (transform.position.y < -8)
             {
-                
+                Respawn();
             }
         }
     }
