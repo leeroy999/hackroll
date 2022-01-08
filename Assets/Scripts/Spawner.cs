@@ -9,7 +9,6 @@ public class Spawner : MonoBehaviourPun
 {
     public GameObject CatPrefab;
     public Text PlayerCountText;
-    public Text Health;
     public Transform Portal1;
     public Transform Portal2;
 
@@ -44,11 +43,6 @@ public class Spawner : MonoBehaviourPun
         {
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
-    }
-
-    private void Update()
-    {
-        Health.text = "Health: " + GameManager.Health;
     }
 
     [PunRPC]

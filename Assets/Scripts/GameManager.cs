@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public static int Level;
     public static int MaxLevel = 0;
     public static int SceneBuildInitial;
-    public static int Health = 100;
     public static Vector2 SpawnPoint;
     public static int Portal;
     public static string PlayerName;
@@ -30,13 +29,6 @@ public class GameManager : MonoBehaviour
         new Color(157, 164, 233, 255), //light blue
     };
 
-    [PunRPC]
-    public static void Injured()
-    {
-        Health -= 10;
-    }
-
-    [PunRPC]
     public static void PlayerWin(string name)
     {
         Level += 1;
@@ -53,8 +45,5 @@ public class GameManager : MonoBehaviour
         ScoreBoard[name] = Jealousy.ContainsKey(name) 
             ? ScoreBoard[name] + losers
             : losers; 
-        int lvl = SceneBuildInitial + Level;
-        Debug.Log("Win" + lvl.ToString());
-        SceneManager.LoadScene(lvl);
     }
 }

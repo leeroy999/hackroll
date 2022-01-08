@@ -9,11 +9,13 @@ using Photon.Pun;
 public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     public float _speed = 20f;
+    public int Health = 100;
     [SerializeField] private float _jumpForce = 100f;
     [Range(0, .3f)] [SerializeField] private float _movementSmoothing = .1f;
     [SerializeField] private LayerMask _colliders;
     [SerializeField] private Transform _groundChecker;
     [SerializeField] private TextMesh _playerName;
+    [SerializeField] private TextMesh _health;
 
     private const float _groundedRadius = .075f;
     private bool _isGrounded;
@@ -33,7 +35,6 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _body = GetComponent<Rigidbody2D>();
         _view = GetComponent<PhotonView>();
         _sprite = GetComponent<SpriteRenderer>();
-        _sprite.color = GameManager.PlayerColors[GameManager.PlayerNo];
         if (!_view.ObservedComponents.Contains(this))
 		{
 			_view.ObservedComponents.Add(this);
@@ -45,9 +46,10 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     {
         if (_view.IsMine)
         {
+            this.photonView.RPC("UpdateHealth", RpcTarget.All);
             this.photonView.RPC("ChangeName", RpcTarget.All, PhotonNetwork.NickName);
             _horizontalMove = !_isHurting 
-                ? Input.GetAxisRaw("Horizontal") * _speed * GameManager.Health / 100
+                ? Input.GetAxisRaw("Horizontal") * _speed * Health / 100
                 : 0;
             if (Input.GetAxisRaw("Vertical") > 0 && !_isHurting)
             {
@@ -56,12 +58,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 
             if (Input.GetKey("r"))
             {
-                Respawn();
+                this.photonView.RPC("Respawn", RpcTarget.All);
             }
 
             if (transform.position.y < -8)
             {
-                Respawn();
+                this.photonView.RPC("Respawn", RpcTarget.All);
             }
         }
     }
@@ -134,10 +136,19 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         }
     }
 
+    [PunRPC]
+    public void Injured()
+    {
+        if (_view.IsMine)
+        {
+            Health -= 10;
+        }
+    }
+
     private IEnumerator Hurting()
     {
         _isHurting = true;
-        GameManager.Injured();
+        this.photonView.RPC("Injured", RpcTarget.All);
         bool alpha = true;
         for (int i = 0; i <= 10; i++)
         {
@@ -149,9 +160,22 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _isHurting = false;
     }
 
+    [PunRPC]
     private void Respawn()
     {
-        transform.position = GameManager.SpawnPoint;
-        GameManager.Health = 100;
+        if (_view.IsMine)
+        {
+            transform.position = GameManager.SpawnPoint;
+            Health = 100;
+        }
+    }
+
+    [PunRPC]
+    private void UpdateHealth()
+    {
+        if (_view.IsMine)
+        {
+            _health.text = Health.ToString() + " Health";
+        }
     }
 }

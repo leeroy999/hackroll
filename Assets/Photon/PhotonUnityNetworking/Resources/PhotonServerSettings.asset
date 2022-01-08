@@ -43,6 +43,9 @@ MonoBehaviour:
   - ChangeName
   - PlayerWin
   - Injured
+  - Respawn
+  - UpdateHealth
+  - Win
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
