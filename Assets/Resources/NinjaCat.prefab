@@ -311,7 +311,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 20
   Health: 100
-  _jumpForce: 100
+  _jumpForce: 4
   _movementSmoothing: 0.1
   _colliders:
     serializedVersion: 2

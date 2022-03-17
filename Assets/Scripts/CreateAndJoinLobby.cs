@@ -11,7 +11,28 @@ public class CreateAndJoinLobby : MonoBehaviourPunCallbacks
     public InputField CreateInput;
     public InputField JoinInput;
     public Text ErrorText;
+    public Text Information;
 
+    private void Start()
+    {
+        PhotonNetwork.ConnectToRegion("asia");
+    }
+    private void Update()
+    {
+        Information.text = "AppVersion: " + PhotonNetwork.AppVersion + "\n"
+        + "AuthValues: " + PhotonNetwork.AuthValues.AuthGetParameters + "\n"
+        + "CloudRegion: " + PhotonNetwork.CloudRegion + "\n"
+        + "CountOfPlayers: " + PhotonNetwork.CountOfPlayers.ToString() + "\n"
+        + "CountOfPlayersOnMaster: " + PhotonNetwork.CountOfPlayersOnMaster.ToString() + "\n"
+        + "CountOfPlayersInRooms: " + PhotonNetwork.CountOfPlayersInRooms.ToString() + "\n"
+        + "BestRegionSummaryInPreferences: " + PhotonNetwork.BestRegionSummaryInPreferences + "\n"
+        + "CurrentLobby: " + PhotonNetwork.CurrentLobby.Name + "\n"
+        + "CurrentCluster: " + PhotonNetwork.CurrentCluster + "\n"
+        + "PacketLoss: " + PhotonNetwork.PacketLossByCrcCheck.ToString() + "\n"
+        + "PhotonServerSettings" + PhotonNetwork.PhotonServerSettings.name + "\n"
+        + "ServerAddress" + PhotonNetwork.ServerAddress + "\n"
+        + "Ping: " + PhotonNetwork.GetPing().ToString() + "\n";
+    }
     public void CreateRoom()
     {
         if (!string.IsNullOrWhiteSpace(NameInput.text) && !string.IsNullOrWhiteSpace(CreateInput.text))

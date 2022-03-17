@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 {
     public float _speed = 20f;
     public int Health = 100;
-    [SerializeField] private float _jumpForce = 100f;
+    [SerializeField] private float _jumpForce = 4;
     [Range(0, .3f)] [SerializeField] private float _movementSmoothing = .1f;
     [SerializeField] private LayerMask _colliders;
     [SerializeField] private Transform _groundChecker;
@@ -116,7 +116,8 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         if (_isJump && _isGrounded) 
         {
             _isGrounded = false;
-            _body.AddForce(new Vector2(0f, _jumpForce));
+            _body.velocity =  new Vector2(_body.velocity.x, _jumpForce);
+            _isJump = false;
         }
     }
 

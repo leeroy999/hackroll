@@ -9,6 +9,7 @@ public class Spawner : MonoBehaviourPun
 {
     public GameObject CatPrefab;
     public Text PlayerCountText;
+    public Text Ping;
     public Transform Portal1;
     public Transform Portal2;
 
@@ -26,14 +27,15 @@ public class Spawner : MonoBehaviourPun
             GameManager.PlayerName = PhotonNetwork.NickName;
             GameManager.SceneBuildInitial = SceneManager.GetActiveScene().buildIndex;
             GameManager.PlayerNo = (playerCount - 1) % 8;
+            GameManager.addPlayer(PhotonNetwork.NickName);
             PhotonNetwork.Instantiate(CatPrefab.name, position, Quaternion.identity);
         } 
-        // else if (GameManager.Level < GameManager.MaxLevel) {
-        //     Transform spawn = GameManager.Portal == 0 ? Portal2.transform : Portal1.transform;
-        //     Vector2 position = new Vector2(spawn.position.x, spawn.position.y);
-        //     GameManager.SpawnPoint = position;
-        //     PhotonNetwork.Instantiate(CatPrefab.name, position, Quaternion.identity);
-        // }
+        else if (GameManager.Level <= GameManager.MaxLevel) {
+            Transform spawn = GameManager.Portal == 0 ? Portal2.transform : Portal1.transform;
+            Vector2 position = new Vector2(spawn.position.x, spawn.position.y);
+            GameManager.SpawnPoint = position;
+            PhotonNetwork.Instantiate(CatPrefab.name, position, Quaternion.identity);
+        }
 
         // restrict to 8 players
         if (playerCount >= 8)
@@ -43,6 +45,11 @@ public class Spawner : MonoBehaviourPun
         {
             PhotonNetwork.CurrentRoom.IsOpen = true;
         }
+    }
+
+    private void Update()
+    {
+        Ping.text = "Ping: " + PhotonNetwork.GetPing().ToString();
     }
 
     [PunRPC]
