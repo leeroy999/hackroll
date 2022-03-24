@@ -6,10 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class ConnectToServer : MonoBehaviourPunCallbacks
 {
+    void Awake()
+        {
+            // #Critical
+            // this makes sure we can use PhotonNetwork.LoadLevel() on the master client 
+            // and all clients in the same room sync their level automatically
+            PhotonNetwork.AutomaticallySyncScene = true;
+        }
+    
     // Start is called before the first frame update
     private void Start()
     {
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.GameVersion = GameManager.gameVersion;
     }
 
     // When successfully connected to Photon Server

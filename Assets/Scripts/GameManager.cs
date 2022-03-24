@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Photon.Realtime;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviourPunCallbacks
 {
+    public static string gameVersion = "1.0";
+
     public static HashSet<string> playerSet = new HashSet<string>();
 
     public static int Level;
@@ -16,7 +19,6 @@ public class GameManager : MonoBehaviour
     public static string PlayerName;
     public static int PlayerNo;
     public static Dictionary<string, Dictionary<string,int>> Jealousy = new Dictionary<string, Dictionary<string,int>>();
-    public static Dictionary<string, int> ScoreBoard = new Dictionary<string, int>();
     
 
     public static Color[] PlayerColors = 
@@ -57,24 +59,6 @@ public class GameManager : MonoBehaviour
                     : 1;
             }
         }
-
-        // ScoreBoard[name] = Jealousy.ContainsKey(name) 
-        //     ? ScoreBoard[name] + losers
-        //     : losers; 
     }
 
-    public static float JealousyCount(string name, HashSet<string> namesToCheck)
-    {
-        float count = 0;
-        foreach (string nameCheck in namesToCheck)
-        {
-            if (Jealousy.ContainsKey(name))
-            {
-                count += Jealousy[name].ContainsKey(nameCheck)
-                    ? Jealousy[name][nameCheck]
-                    : 0;
-            }
-        }
-        return count * 10 / namesToCheck.Count;
-    }
 }
