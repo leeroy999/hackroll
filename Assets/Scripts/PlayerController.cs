@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             this.photonView.RPC("UpdateHealth", RpcTarget.All);
             this.photonView.RPC("ChangeName", RpcTarget.All, PhotonNetwork.NickName);
             _horizontalMove = !_isHurting 
-                ? Input.GetAxisRaw("Horizontal") * _speed * Health / 100
+                ? Input.GetAxisRaw("Horizontal") * _speed * Mathf.Min(Mathf.Abs(Health), 100) / 100
                 : 0;
             if (Input.GetAxisRaw("Vertical") > 0 && !_isHurting)
             {
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private void Move(float move) 
     {
         // Move the character by finding the target velocity
-        Vector3 targetVelocity = new Vector2(move * 10f, _body.velocity.y);
+        Vector2 targetVelocity = new Vector2(move * 10f, _body.velocity.y);
         // And then smoothing it out and applying it to the character
         _body.velocity = Vector2.SmoothDamp(_body.velocity, targetVelocity, ref _velocity, _movementSmoothing);
 
