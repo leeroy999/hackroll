@@ -38,7 +38,7 @@ public class CreateAndJoinLobby : MonoBehaviourPunCallbacks
         if (!string.IsNullOrWhiteSpace(NameInput.text) && !string.IsNullOrWhiteSpace(CreateInput.text))
         {
             PhotonNetwork.NickName = NameInput.text;
-            PhotonNetwork.CreateRoom(CreateInput.text);
+            PhotonNetwork.CreateRoom(CreateInput.text.ToUpper());
         } else
         {
             ErrorText.text = "Must have a room name and player name!";
@@ -50,7 +50,7 @@ public class CreateAndJoinLobby : MonoBehaviourPunCallbacks
         if (!string.IsNullOrWhiteSpace(NameInput.text) && !string.IsNullOrWhiteSpace(JoinInput.text))
         {
             PhotonNetwork.NickName = NameInput.text;
-            PhotonNetwork.JoinRoom(JoinInput.text);
+            PhotonNetwork.JoinRoom(JoinInput.text.ToUpper());
         } else
         {
             ErrorText.text = "Must have a room name and player name!";
@@ -59,6 +59,7 @@ public class CreateAndJoinLobby : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
+        Debug.Log(PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.LoadLevel("Game");
     }
 
