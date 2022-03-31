@@ -5,7 +5,7 @@ using Photon.Pun;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PhotonView))]
-public class NextLevel : MonoBehaviourPun
+public class NextLevel : MonoBehaviourPunCallbacks
 {
     private PhotonView _view;
     private void Start()
@@ -24,10 +24,15 @@ public class NextLevel : MonoBehaviourPun
     [PunRPC]
     private void Win(string name)
     {
-        Debug.Log("win");
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
+            return;
+        }
         GameManager.PlayerWin(name);
         int lvl = GameManager.SceneBuildInitial + GameManager.Level;
         Debug.Log("Win" + lvl.ToString() + name);
-        SceneManager.LoadScene(lvl);
+        PhotonNetwork.LoadLevel(lvl);
+
     }
 }
