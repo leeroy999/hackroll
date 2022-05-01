@@ -60,6 +60,7 @@ public class CreateAndJoinLobby : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PhotonNetwork.LoadLevel("Game");
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

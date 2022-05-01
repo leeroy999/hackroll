@@ -16,6 +16,7 @@ public class Spawner : MonoBehaviourPun
     // Start is called before the first frame update
     public void Start()
     {
+        
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         this.photonView.RPC("UpdateCount", RpcTarget.All, playerCount);
         if (GameManager.Level == 0) {
