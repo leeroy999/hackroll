@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private PhotonView _view;
     private SpriteRenderer _sprite;
     private bool _isHurting = false;
+    private Vector3 correctPlayerPos = Vector3.zero;
 
 
     // Start is called before the first frame update
@@ -65,6 +66,16 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             {
                 this.photonView.RPC("Respawn", RpcTarget.All);
             }
+        } else {
+            float distance = Vector3.Distance(transform.position, this.correctPlayerPos);
+            if (distance < 2f)
+            {
+                transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * 5);
+            }
+            else
+            {
+                transform.position = this.correctPlayerPos;
+            }
         }
     }
 
@@ -90,10 +101,12 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 		if (stream.IsWriting)
 		{
 			stream.SendNext(_sprite.flipX);
+            stream.SendNext(transform.position);
 		}
 		else
 		{
 			_sprite.flipX = (bool) stream.ReceiveNext();
+            this.correctPlayerPos = (Vector3)stream.ReceiveNext();
 		}
 	}
 
