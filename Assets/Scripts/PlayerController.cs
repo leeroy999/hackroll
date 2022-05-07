@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
     private const float _groundedRadius = .075f;
     private bool _isGrounded;
     private Rigidbody2D _body;
+    private Animator _anim;
     private Vector2 _velocity = Vector2.zero;
     private float _horizontalMove = 0f;
     private bool _isJump = false;
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         _body = GetComponent<Rigidbody2D>();
         _view = GetComponent<PhotonView>();
         _sprite = GetComponent<SpriteRenderer>();
+        _anim = GetComponent<Animator>();
         if (!_view.ObservedComponents.Contains(this))
 		{
 			_view.ObservedComponents.Add(this);
@@ -52,6 +54,7 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
             _horizontalMove = !_isHurting 
                 ? Input.GetAxisRaw("Horizontal") * _speed * Mathf.Min(Mathf.Abs(Health), 100) / 100
                 : 0;
+            _anim.SetFloat("speed", Mathf.Abs(_horizontalMove));
             if (Input.GetAxisRaw("Vertical") > 0 && !_isHurting)
             {
                 _isJump = true;
@@ -90,7 +93,13 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
 		{
 			if (colliders[i].gameObject != gameObject)
 				_isGrounded = true;
+               
 		}
+        if (_isGrounded) {
+            _anim.SetBool("isJumping", false);
+        } else if (_isJump) {
+            _anim.SetBool("isJumping", true);
+        }
         // Move our character
         Move(_horizontalMove * Time.fixedDeltaTime);
         _isJump = false;
@@ -121,9 +130,11 @@ public class PlayerController : MonoBehaviourPun, IPunObservable
         {
             // flip the player.
             _sprite.flipX = true;
+            
         } else if (move > 0)
         {
             _sprite.flipX = false;
+        } else {
         }
 
         if (_isJump && _isGrounded) 
